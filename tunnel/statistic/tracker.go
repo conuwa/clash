@@ -10,9 +10,10 @@ import (
 	"go.uber.org/atomic"
 )
 
-type tracker interface {
+type Tracker interface {
 	ID() string
 	Close() error
+	TrackerInfo() *trackerInfo
 }
 
 type trackerInfo struct {
@@ -24,6 +25,10 @@ type trackerInfo struct {
 	Chain         C.Chain       `json:"chains"`
 	Rule          string        `json:"rule"`
 	RulePayload   string        `json:"rulePayload"`
+}
+
+func (ti trackerInfo) TrackerInfo() *trackerInfo {
+	return &ti
 }
 
 type tcpTracker struct {

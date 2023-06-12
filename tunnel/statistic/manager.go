@@ -32,11 +32,11 @@ type Manager struct {
 	downloadTotal *atomic.Int64
 }
 
-func (m *Manager) Join(c tracker) {
+func (m *Manager) Join(c Tracker) {
 	m.connections.Store(c.ID(), c)
 }
 
-func (m *Manager) Leave(c tracker) {
+func (m *Manager) Leave(c Tracker) {
 	m.connections.Delete(c.ID())
 }
 
@@ -55,9 +55,9 @@ func (m *Manager) Now() (up int64, down int64) {
 }
 
 func (m *Manager) Snapshot() *Snapshot {
-	connections := []tracker{}
+	connections := []Tracker{}
 	m.connections.Range(func(key, value any) bool {
-		connections = append(connections, value.(tracker))
+		connections = append(connections, value.(Tracker))
 		return true
 	})
 
@@ -91,5 +91,5 @@ func (m *Manager) handle() {
 type Snapshot struct {
 	DownloadTotal int64     `json:"downloadTotal"`
 	UploadTotal   int64     `json:"uploadTotal"`
-	Connections   []tracker `json:"connections"`
+	Connections   []Tracker `json:"connections"`
 }
